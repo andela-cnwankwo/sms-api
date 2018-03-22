@@ -10,7 +10,8 @@ module.exports = {
         type: Sequelize.STRING
       },
       status: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        defaultValue: 'created'
       },
       createdAt: {
         allowNull: false,

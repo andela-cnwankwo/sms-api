@@ -1,7 +1,10 @@
 module.exports = (sequelize, DataTypes) => {
   var Sms = sequelize.define('Sms', {
     message: DataTypes.STRING,
-    status: DataTypes.STRING,
+    status: {
+      type: DataTypes.STRING,
+      defaultValue: 'created'
+    },
     sender_id: DataTypes.INTEGER,
     receiver_id: DataTypes.INTEGER
   }, {});
