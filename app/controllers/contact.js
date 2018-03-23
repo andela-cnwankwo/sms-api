@@ -75,6 +75,8 @@ const getAllContacts = (req, res) => {
  * @returns {object} http response object.
  */
 const updateContact = (req, res) => {
+    const contactName = req.body.name;
+    let contactPhoneNumber = req.body.phone_number;
     Contact.find({
       where: {
         id: req.params.id
@@ -86,9 +88,13 @@ const updateContact = (req, res) => {
       if (!contact) {
         return res.status(404).send({ message: 'Contact not found' });
       }
+      // When phone number is not specified
+      if(!req.body.phone_number) {
+        contactPhoneNumber = contact.phone_number;
+      }
       contact.update({
-        name: req.body.name,
-        phone_number: req.body.phone_number
+        name: contactName,
+        phone_number: contactPhoneNumber
       }).then(() => res.status(200).send({ message: 'Contact Updated!' }));
     });
 };
