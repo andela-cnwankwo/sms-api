@@ -48,7 +48,7 @@ const Routes = (router) => {
 
     // delete sms
     router.route('/deleteSms/:id')
-            .put(deleteSms);
+            .delete(deleteSms);
   };
   
   module.exports = Routes;
