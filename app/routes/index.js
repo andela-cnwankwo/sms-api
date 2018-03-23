@@ -1,8 +1,8 @@
-const smsMgtRoutes = require('./smsMgtRoutes');
+const Routes = require('./routes');
 
 // Configure routes
 const routes = (router) => {
-    smsMgtRoutes(router);
+    Routes(router);
 };
 
 module.exports = routes;

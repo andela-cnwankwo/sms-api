@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE'
     });
 
-    // Received messages reference a contact
+    // Recieved messages belong to a contact
     Sms.belongsTo(models.Contact, {
       foreignKey: 'receiver_id',
       onDelete: 'CASCADE'

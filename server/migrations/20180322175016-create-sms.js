@@ -24,8 +24,9 @@ module.exports = {
       sender_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Sms',
-          key: 'id'
+          model: 'Contacts',
+          key: 'id',
+          as: 'sender_id'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'
@@ -33,12 +34,13 @@ module.exports = {
       receiver_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Sms',
-          key: 'id'
+          model: 'Contacts',
+          key: 'id',
+          as: 'receiver_id'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'
-      }
+      },
     }),
   down: (queryInterface, Sequelize) => queryInterface.dropTable('Sms')
 };

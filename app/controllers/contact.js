@@ -54,6 +54,21 @@ const getContact = (req, res) => {
   };
 
 /**
+ * Get all contacts
+ * @param {object} req
+ * @param {function} res
+ * @returns {object} http response object.
+ */
+const getAllContacts = (req, res) => {
+    Contact.findAll({}).then((contacts) => {
+        if (contacts) {
+          return res.status(200).send({ contacts });
+        }
+        return res.status(404).send({ message: 'No Contact found' });
+      });
+  };
+
+/**
  * Update created contact
  * @param {object} req
  * @param {function} res // Object
@@ -106,6 +121,7 @@ const deleteContact = (req, res) => {
 module.exports = {
     createContact,
     getContact,
+    getAllContacts,
     updateContact,
     deleteContact
 }

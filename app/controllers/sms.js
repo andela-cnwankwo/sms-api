@@ -1,6 +1,7 @@
 //  Defines various services for the role object
-
 const db = require('../models');
+
+const sequelize = db.sequelize;
 
 const Sms = db.Sms;
 
@@ -16,14 +17,12 @@ const createSms = (req, res) => {
     where: {
         message: newSms.message,
         status: 'created',
-        sender_id: newSms.sender_id,
-        receiver_id: newSms.receiver_id
+        sender_id: newSms.sender_id
     },
     defaults: {
         message: newSms.message,
         status: 'created',
-        sender_id: newSms.sender_id,
-        receiver_id: newSms.receiver_id
+        sender_id: newSms.sender_id
     }
   })
     .spread((sms, created) => {
@@ -41,20 +40,29 @@ const createSms = (req, res) => {
  * @returns {object} http response object
  */
 const sendSms = (req, res) => {
+  const receipient_id = req.body.receiver_id;
     Sms.find({
         where: {
           id: req.params.id
         },
         attributes: [
-          'id', 'status'
+          'id', 'status', 'receiver_id'
         ]
       }).then((sms) => {
         if (!sms) {
           return res.status(404).send({ message: 'SMS not found' });
         }
+        // check if SMS is already sent
+        if (sms.status === 'sent') {
+          return res.status(404).send({ message: 'SMS already sent' });
+        }
         sms.update({
           status: 'sent',
+          receiver_id: receipient_id
         }).then(() => res.status(200).send({ message: 'SMS Sent!' }));
+      })
+      .catch(function (err) {
+        return res.status(500).send({ message: err });
       });
   };
 
@@ -80,6 +88,21 @@ const getSms = (req, res) => {
 
       return res.status(200).send(sms);
     });
+};
+
+/**
+ * Get created sms
+ * @param {object} req
+ * @param {function} res
+ * @returns {object} http response object.
+ */
+const getAllSms = (req, res) => {
+    Sms.findAll({}).then((sms) => {
+        if (sms) {
+          return res.status(200).send({ sms });
+        }
+        return res.status(404).send({ message: 'No SMS found' });
+      });
 };
 
 /**
@@ -119,5 +142,6 @@ module.exports = {
     createSms,
     sendSms,
     getSms,
+    getAllSms,
     deleteSms
 }
