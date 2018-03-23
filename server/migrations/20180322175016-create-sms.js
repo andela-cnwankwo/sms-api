@@ -31,12 +31,12 @@ module.exports = {
         onUpdate: 'cascade',
         onDelete: 'cascade'
       },
-      receiver_id: {
+      receiver_number: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Contacts',
-          key: 'id',
-          as: 'receiver_id'
+          key: 'phone_number',
+          as: 'receiver_number'
         },
         onUpdate: 'cascade',
         onDelete: 'cascade'

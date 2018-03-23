@@ -109,7 +109,6 @@ const deleteContact = (req, res) => {
       if (!contact) {
         return res.status(404).send({ message: 'Contact Not found' });
       }
-    }).then(() => {
       Contact.destroy({
         where: {
           id: req.params.id

@@ -1,7 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   var Contact = sequelize.define('Contact', {
     name: DataTypes.STRING,
-    phone_number: DataTypes.STRING,
+    phone_number: {
+      type: DataTypes.INTEGER,
+      unique: true,
+      allowNull: false
+    },
   }, {});
   Contact.associate = (models) => {
     //A contact can send many messages
@@ -11,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
     //A contact can receive many messages
     Contact.hasMany(models.Sms, {
-      foreignKey: 'receiver_id'
+      foreignKey: 'receiver_number'
     });
   };
   return Contact;

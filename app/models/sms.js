@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: 'created'
     },
     sender_id: DataTypes.INTEGER,
-    receiver_id: DataTypes.INTEGER
+    receiver_number: DataTypes.STRING
   }, {});
   Sms.associate = (models) => {
     // Sent messages belong to a contact
@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
     // Recieved messages belong to a contact
     Sms.belongsTo(models.Contact, {
-      foreignKey: 'receiver_id',
+      foreignKey: 'receiver_number',
       onDelete: 'CASCADE'
     });
   };

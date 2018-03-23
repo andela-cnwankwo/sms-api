@@ -40,13 +40,13 @@ const createSms = (req, res) => {
  * @returns {object} http response object
  */
 const sendSms = (req, res) => {
-  const receipient_id = req.body.receiver_id;
+  const receipient_number = req.body.receiver_number;
     Sms.find({
         where: {
           id: req.params.id
         },
         attributes: [
-          'id', 'status', 'receiver_id'
+          'id', 'status', 'receiver_number'
         ]
       }).then((sms) => {
         if (!sms) {
@@ -58,8 +58,9 @@ const sendSms = (req, res) => {
         }
         sms.update({
           status: 'sent',
-          receiver_id: receipient_id
-        }).then(() => res.status(200).send({ message: 'SMS Sent!' }));
+          receiver_number: receipient_number
+        }).then(() => res.status(200).send({ message: 'SMS Sent!' }))
+        .catch(err => res.status(400).send({ message: `Cannot Send SMS to ${receipient_number}` }));
       })
       .catch(function (err) {
         return res.status(500).send({ message: err });
@@ -79,7 +80,7 @@ const getSms = (req, res) => {
         id: req.params.id
       },
       attributes: [
-        'id', 'message', 'status', 'sender_id', 'receiver_id'
+        'id', 'message', 'status', 'sender_id', 'receipient_number'
       ]
     }).then((sms) => {
       if (!sms) {
@@ -123,12 +124,10 @@ const deleteSms = (req, res) => {
         return res.status(404).send({ message: 'SMS not found' });
       }
       const smsStatus = sms.status;
-      // check if it's sent and hence can only be deleted by receiver
-      if(sms.status === 'sent' && reqId !== sms.receiver_id) {
-            return res.status(400).send({ message: 'Sent SMS cannot be deleted' });
-        } else if(sms.status !== 'sent' && reqId !== sms.sender_id) {
+      // if sms is not sent it can be deleted by the creator
+     if(sms.status !== 'sent' && reqId !== sms.sender_id) {
             return res.status(401).send({ message: 'Cannot delete SMS' });
-        }
+      }
     }).then(() => {
         Sms.destroy({
         where: {
