@@ -28,7 +28,7 @@ const createSms = (req, res) => {
         return res.status(409).send({ message: 'SMS already exist' });
       }
       return res.status(201).send(sms);
-    });
+    }).catch(err => res.status(400).send({message: 'Cannot create SMS, ensure contact with sender_id exists'}))
 };
 
 /**
